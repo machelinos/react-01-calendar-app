@@ -1,9 +1,9 @@
-import { AppRouter } from "./routers/AppRouter"
+import { AppRouter } from "./routers/AppRouter";
+
+import './style.css';
 
 export const CalendarApp = () => {
   return (
-    <div>
-      <AppRouter />
-    </div>
+    <AppRouter />
   )
 }
