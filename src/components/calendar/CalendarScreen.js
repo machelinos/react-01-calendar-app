@@ -6,10 +6,12 @@ import getDay from 'date-fns/getDay'
 import es from 'date-fns/locale/es'
 import { addHours } from 'date-fns/esm'
 
+import { CalendarEvent } from './CalendarEvent'
 import { Navbar } from "../ui/Navbar"
 import { messages } from '../../helpers/calendar-messages-es'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { useState } from 'react'
 
 const locales = {
   'es': es,
@@ -28,11 +30,17 @@ const events = [
     title: 'Cumpleaños del jefe',
     start: new Date(),
     end: addHours(new Date(), 2),
-    bgcolor: '#fafafa'
+    bgcolor: '#fafafa',
+    user: {
+      _id: '12321',
+      name: 'Joy M'
+    }
   }
 ]
 
 export const CalendarScreen = () => {
+
+  const [lastView, setLastView] = useState(localStorage.getItem('lastView')|| 'month');
 
   const eventStyleGetter = (event, start, end, isSelected) => {
     const style = {
@@ -48,11 +56,26 @@ export const CalendarScreen = () => {
     }
   }
 
+  const onDoubleClick = (e) => {
+    console.log('Double click event',e);
+  }
+
+  const onSelectEvent = (e) => {
+    console.log('Select event', e);
+  }
+
+  const onViewChange = (e) => {
+    console.log(e);
+    setLastView(e);
+    localStorage.setItem('lastView', e);
+  }
+
   return (
     <div className='big-calendar'>
       <Navbar />
 
       <Calendar
+        components={ {event: CalendarEvent} }
         culture={'es'}
         localizer={localizer}
         messages={messages}
@@ -60,6 +83,10 @@ export const CalendarScreen = () => {
         startAccessor="start"
         endAccessor="end"
         eventPropGetter={eventStyleGetter}
+        onDoubleClickEvent = { onDoubleClick }
+        onSelectEvent = { onSelectEvent }
+        onView = { onViewChange }
+        view = { lastView }
       />
     </div>
   )
