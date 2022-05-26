@@ -12,6 +12,7 @@ import { messages } from '../../helpers/calendar-messages-es'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useState } from 'react'
+import { CalendarModal } from './CalendarModal'
 
 const locales = {
   'es': es,
@@ -88,6 +89,8 @@ export const CalendarScreen = () => {
         onView = { onViewChange }
         view = { lastView }
       />
+
+      <CalendarModal />
     </div>
   )
 }
