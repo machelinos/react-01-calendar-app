@@ -5,7 +5,8 @@ import Modal from "react-modal/lib/components/Modal";
 import 'react-datetime-picker/dist/DateTimePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import 'react-clock/dist/Clock.css';
-import { addHours } from "date-fns";
+import { addHours, compareAsc } from "date-fns";
+import Swal from "sweetalert2";
 
 const customStyles = {
     content: {
@@ -28,20 +29,61 @@ export const CalendarModal = () => {
 
     const [startDate, setStartDate] =useState(new Date(now));
     const [endDate, setEndDate] = useState(new Date(nowPlusOne));
+    const [formValues, setFormValues] = useState({
+        title: 'Event',
+        notes: '',
+        start: startDate,
+        end: endDate
+    });
+    const [isTitleValid, setIsTitleValid] = useState(true);
+
+    const {title, notes} = formValues;
 
     const closeModal = (e) => {
-        console.log(e);
         setIsOpenModal(false);
-    }
+    };
 
     const handleStartDateChange = (e) => {
-        console.log(e);
         setStartDate(e);
-    }
+        setFormValues({
+            ...formValues,
+            start: e
+        })
+    };
 
     const handleEndDateChange = (e) => {
-        console.log(e);
         setEndDate(e);
+        setFormValues({
+            ...formValues,
+            end: e
+        })
+    }
+
+    const handleInputChange = ({target}) => {
+        setFormValues({
+            ...formValues,
+            [target.name]: target.value
+        });
+    }
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+
+        if(compareAsc(endDate, startDate)<=0){
+            return Swal.fire({
+                title: 'Error',
+                text: 'End date must be greater than start date',
+                icon: 'error'
+            });
+        }
+
+        if(title.trim().length < 2){
+            setIsTitleValid(false);
+            return;
+        }
+
+        closeModal();
+    
     }
 
     return (
@@ -57,7 +99,10 @@ export const CalendarModal = () => {
 
             <h1> Nuevo evento </h1>
             <hr />
-            <form className="container">
+            <form
+                className="container"
+                onSubmit={handleFormSubmit}
+            >
 
                 <div className="form-group">
                     <label>Fecha y hora inicio</label>
@@ -83,10 +128,12 @@ export const CalendarModal = () => {
                     <label>Titulo y notas</label>
                     <input 
                         type="text" 
-                        className="form-control"
+                        className={ isTitleValid ? 'form-control' : 'form-control is-invalid'}
                         placeholder="Título del evento"
                         name="title"
                         autoComplete="off"
+                        onChange={handleInputChange}
+                        value={title}
                     />
                     <small id="emailHelp" className="form-text text-muted">Una descripción corta</small>
                 </div>
@@ -98,6 +145,8 @@ export const CalendarModal = () => {
                         placeholder="Notas"
                         rows="5"
                         name="notes"
+                        onChange={handleInputChange}
+                        value={notes}
                     ></textarea>
                     <small id="emailHelp" className="form-text text-muted">Información adicional</small>
                 </div>
