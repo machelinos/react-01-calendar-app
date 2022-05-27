@@ -13,6 +13,8 @@ import { messages } from '../../helpers/calendar-messages-es'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useState } from 'react'
 import { CalendarModal } from './CalendarModal'
+import { useDispatch } from 'react-redux'
+import { uiOpenModal } from '../../actions/ui'
 
 const locales = {
   'es': es,
@@ -41,6 +43,8 @@ const events = [
 
 export const CalendarScreen = () => {
 
+  const dispatch = useDispatch();
+
   const [lastView, setLastView] = useState(localStorage.getItem('lastView')|| 'month');
 
   const eventStyleGetter = (event, start, end, isSelected) => {
@@ -59,6 +63,7 @@ export const CalendarScreen = () => {
 
   const onDoubleClick = (e) => {
     console.log('Double click event',e);
+    dispatch(uiOpenModal());
   }
 
   const onSelectEvent = (e) => {

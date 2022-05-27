@@ -7,6 +7,8 @@ import 'react-calendar/dist/Calendar.css';
 import 'react-clock/dist/Clock.css';
 import { addHours, compareAsc } from "date-fns";
 import Swal from "sweetalert2";
+import { useDispatch, useSelector } from "react-redux";
+import { uiCloseModal } from "../../actions/ui";
 
 const customStyles = {
     content: {
@@ -25,7 +27,9 @@ const now = addHours(new Date(), 1).setMinutes(0, 0);
 const nowPlusOne = addHours(now, 1); 
 
 export const CalendarModal = () => {
-    const [isOpenModal, setIsOpenModal] = useState(true);
+    const state = useSelector(state=>state);
+
+    const { ui } = state;
 
     const [startDate, setStartDate] =useState(new Date(now));
     const [endDate, setEndDate] = useState(new Date(nowPlusOne));
@@ -39,8 +43,10 @@ export const CalendarModal = () => {
 
     const {title, notes} = formValues;
 
+    const dispatch = useDispatch();
+
     const closeModal = (e) => {
-        setIsOpenModal(false);
+        dispatch(uiCloseModal());
     };
 
     const handleStartDateChange = (e) => {
@@ -82,6 +88,7 @@ export const CalendarModal = () => {
             return;
         }
 
+        setIsTitleValid(true);
         closeModal();
     
     }
@@ -90,7 +97,7 @@ export const CalendarModal = () => {
         <Modal
             className="modal"
             closeTimeoutMS ={200}
-            isOpen={isOpenModal}
+            isOpen={ui.modalOpen}
             //onAfterOpen={afterOpenModal}
             onRequestClose={closeModal}
             overlayClassName="modal-fondo"
