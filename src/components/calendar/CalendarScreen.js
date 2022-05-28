@@ -4,7 +4,6 @@ import parse from 'date-fns/parse'
 import startOfWeek from 'date-fns/startOfWeek'
 import getDay from 'date-fns/getDay'
 import es from 'date-fns/locale/es'
-import { addHours } from 'date-fns/esm'
 
 import { CalendarEvent } from './CalendarEvent'
 import { Navbar } from "../ui/Navbar"
@@ -13,7 +12,7 @@ import { messages } from '../../helpers/calendar-messages-es'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useState } from 'react'
 import { CalendarModal } from './CalendarModal'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { uiOpenModal } from '../../actions/ui'
 import { eventSetActive } from '../../actions/events'
 import { AddNewFab } from '../ui/AddNewFab'
@@ -30,22 +29,11 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
-const events = [
-  {
-    title: 'Cumpleaños del jefe',
-    start: new Date().getTime(),
-    end: addHours(new Date(), 2).getTime(),
-    bgcolor: '#fafafa',
-    user: {
-      _id: '12321',
-      name: 'Joy M'
-    }
-  }
-]
-
 export const CalendarScreen = () => {
 
   const dispatch = useDispatch();
+
+  const { events } = useSelector(state=>state.calendar)
 
   const [lastView, setLastView] = useState(localStorage.getItem('lastView')|| 'month');
 
