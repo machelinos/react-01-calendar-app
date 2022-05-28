@@ -73,3 +73,8 @@ body,html {
     right: 25px;
     z-index: 10;
 }
+
+.fab--danger{
+    left: 25px;
+    right: auto;
+}
