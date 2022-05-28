@@ -5,8 +5,8 @@ const initialState = {
     events: [
         {
             title: 'Cumpleaños del jefe',
-            start: new Date(),
-            end: addHours(new Date(), 2),
+            start: new Date().getTime(),
+            end: addHours(new Date(), 2).getTime(),
             bgcolor: '#fafafa',
             user: {
               _id: '12321',
@@ -20,6 +20,14 @@ const initialState = {
 
 export const calendarReducer = (state = initialState, action) => {
     switch (action.type) {
+        case types.eventAddNew:
+            return {
+                ...state,
+                events: [
+                    ...state.events,
+                    action.payload
+                ]
+            }
         case types.eventSetActive:
             return {
                 ...state,

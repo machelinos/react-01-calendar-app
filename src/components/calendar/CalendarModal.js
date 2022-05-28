@@ -9,6 +9,7 @@ import { addHours, compareAsc } from "date-fns";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { uiCloseModal } from "../../actions/ui";
+import { eventAddNew } from "../../actions/events";
 
 const customStyles = {
     content: {
@@ -36,8 +37,8 @@ export const CalendarModal = () => {
     const [formValues, setFormValues] = useState({
         title: 'Event',
         notes: '',
-        start: startDate,
-        end: endDate
+        start: startDate.getTime(),
+        end: endDate.getTime()
     });
     const [isTitleValid, setIsTitleValid] = useState(true);
 
@@ -53,7 +54,7 @@ export const CalendarModal = () => {
         setStartDate(e);
         setFormValues({
             ...formValues,
-            start: e
+            start: e.getTime()
         })
     };
 
@@ -61,7 +62,7 @@ export const CalendarModal = () => {
         setEndDate(e);
         setFormValues({
             ...formValues,
-            end: e
+            end: e.getTime()
         })
     }
 
@@ -89,6 +90,15 @@ export const CalendarModal = () => {
         }
 
         setIsTitleValid(true);
+        console.log(formValues);
+        dispatch(eventAddNew({
+            ...formValues,
+            id: new Date().getTime(),
+            user: {
+                _id: '123',
+                name: 'Joy Marcelle'
+            }
+        }))
         closeModal();
     
     }

@@ -33,8 +33,8 @@ const localizer = dateFnsLocalizer({
 const events = [
   {
     title: 'Cumpleaños del jefe',
-    start: new Date(),
-    end: addHours(new Date(), 2),
+    start: new Date().getTime(),
+    end: addHours(new Date(), 2).getTime(),
     bgcolor: '#fafafa',
     user: {
       _id: '12321',
