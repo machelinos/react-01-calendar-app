@@ -1,5 +1,6 @@
 import { fetchSinToken } from "../helpers/fetch";
 import { types } from "../types/types";
+import Swal from "sweetalert2";
 
 export const startLogin = (email, password) => {
     return async( dispatch ) => {
@@ -14,9 +15,12 @@ export const startLogin = (email, password) => {
 
             dispatch(login({uid: body.uid, name:body.name}))
 
-            
         } catch (error) {
-            console.log(await error.json());
+            const errorBody = await error.json();
+            console.log(errorBody);
+            if(errorBody.message){
+                Swal.fire('Error',errorBody.message,'error');
+            }
         }
     }
 }
